@@ -3,15 +3,14 @@ const Main = imports.ui.main;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Panel = imports.ui.panel;
 const { Keybindings } = Me.imports.keybindings;
-const { panelEnchantments, disablePanelEnchantments } =
-	Me.imports.panelEnchantments;
+const { enchantments } = Me.imports.panel.enchantments;
 
 class Extension {
 	enable() {
 		log("// Enable starts");
 		new Keybindings();
 
-		panelEnchantments(Main.panel);
+		enchantments.enable(Main.panel);
 
 		let dtpPrimaryIndex = 0;
 		this.dtpPrimaryMonitor =
@@ -110,21 +109,21 @@ class Extension {
 		Main.MsMain.Monitor.panelBox.add_actor(panel);
 		panel.set_width(2560); // TODO: Hard code screen width
 
-		panelEnchantments(panel, monitor.index);
+		enchantments.enable(panel, monitor.index);
 		return panel;
 	}
 
 	disable() {
 		log("// Disable starts");
 
-		disablePanelEnchantments(Main.panel);
+		enchantments.disable(Main.panel);
 
 		// log(JSON.stringify(this.allPanels));
 		this.allPanels.forEach((panel) => {
 			if (panel) {
 				// log(panel);
 				// panel.get_parent().destroy_all_children();
-				disablePanelEnchantments(panel);
+				enchantments.disable(panel);
 				panel.destroy();
 				panel = null;
 			}
