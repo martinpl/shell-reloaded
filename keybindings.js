@@ -1,8 +1,8 @@
 const { Meta, Shell } = imports.gi;
 const Main = imports.ui.main;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
-const { getSettings } = Me.imports.settings;
-var Windows = Me.imports.windows;
+const { getSettings } = Me.imports.utils.settings;
+var Windows = Me.imports.utils.windows;
 var Keybindings;
 
 const Gio$1 = imports.gi.Gio;

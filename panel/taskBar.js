@@ -1,9 +1,9 @@
 const Me = imports.misc.extensionUtils.getCurrentExtension();
-const { WorkspacesBar } = Me.imports.taskbar;
+const { taskbar } = Me.imports.panel.taskbar.taskbar;
 
 var taskBar = {
 	enable(panel, monitor) {
-		panel.workspaces_bar = new WorkspacesBar(monitor);
+		panel.workspaces_bar = new taskbar(monitor);
 		panel.addToStatusArea(
 			"babar-workspaces-bar",
 			panel.workspaces_bar,
