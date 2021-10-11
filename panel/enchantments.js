@@ -10,15 +10,15 @@ var enchantments = {
 		activitiesIcon.enable(panel);
 		hideAppMenu.enable(panel);
 		taskBar.enable(panel, monitor);
-		moveClock.enable(panel);
 		extendLeftBox.enable(panel);
+		moveClock.enable(panel);
 	},
 
 	disable(panel) {
 		activitiesIcon.disable(panel);
-		taskBar.disable(panel);
 		hideAppMenu.disable(panel);
-		moveClock.disable(panel);
+		taskBar.disable(panel);
 		extendLeftBox.disable(panel);
+		moveClock.disable(panel);
 	},
 };
