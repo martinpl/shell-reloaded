@@ -271,7 +271,7 @@ Keybindings = new imports.lang.Class({
 					_items[ws_index]._sort = currentWindow._sort;
 					currentWindow._sort = temp;
 					// it should update current monitor ws
-					Main.panel.workspaces_bar._update_ws();
+					Main.panel._taskbar._update_ws();
 				}
 			}
 		);
@@ -301,7 +301,7 @@ Keybindings = new imports.lang.Class({
 					const temp = _items[ws_index]._sort;
 					_items[ws_index]._sort = currentWindow._sort;
 					currentWindow._sort = temp;
-					Main.panel.workspaces_bar._update_ws();
+					Main.panel._taskbar._update_ws();
 				}
 			}
 		);
