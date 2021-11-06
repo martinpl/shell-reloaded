@@ -23,8 +23,10 @@ var tab = {
 			const temp = _items[ws_index]._sort;
 			_items[ws_index]._sort = currentWindow._sort;
 			currentWindow._sort = temp;
-			// TODO: it should update current monitor ws
-			Main.panel._taskbar._update_ws();
+
+			Main.layoutManager.monitors[
+				currentWindow.get_monitor()
+			]._panel._taskbar._update_ws();
 		}
 	},
 	moveRight() {
@@ -47,7 +49,9 @@ var tab = {
 			const temp = _items[ws_index]._sort;
 			_items[ws_index]._sort = currentWindow._sort;
 			currentWindow._sort = temp;
-			Main.panel._taskbar._update_ws();
+			Main.layoutManager.monitors[
+				currentWindow.get_monitor()
+			]._panel._taskbar._update_ws();
 		}
 	},
 };

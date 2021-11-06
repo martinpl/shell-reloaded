@@ -2,11 +2,13 @@ const Main = imports.ui.main;
 
 var zen = {
 	toggle() {
-		// TODO: Should work per monitor
-		if (Main.panel.visible) {
-			Main.panel.hide();
+		const currentMonitor = global.display.get_current_monitor();
+		const panel = Main.layoutManager.monitors[currentMonitor]._panel;
+
+		if (panel.visible) {
+			panel.hide();
 		} else {
-			Main.panel.show();
+			panel.show();
 		}
 	},
 };
