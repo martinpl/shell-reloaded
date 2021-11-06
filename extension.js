@@ -10,120 +10,99 @@ class Extension {
 		log("// Enable starts");
 		new Keybindings();
 
-		enchantments.enable(Main.panel);
+		Main.MsMain = new St.Widget({ name: "MsMain" });
 
-		let dtpPrimaryIndex = 0;
-		this.dtpPrimaryMonitor =
-			Main.layoutManager.monitors[dtpPrimaryIndex] ||
-			Main.layoutManager.primaryMonitor;
-		// this.primaryPanel = this._createPanel(this.dtpPrimaryMonitor, true);
-		this.allPanels = [this.primaryPanel];
-		Main.layoutManager.monitors
-			.filter((m) => m != this.dtpPrimaryMonitor)
-			.forEach((m) => {
-				this.allPanels.push(this._createPanel(m, true));
-			});
+		this.allPanels = [];
+		Main.layoutManager.monitors.forEach((m) => {
+			this.allPanels.push(this._createPanel(m));
+		});
 
 		this._updateSingal = Meta.MonitorManager.get().connect(
 			"monitors-changed",
 			this._updateMonitors.bind(this)
 		);
+
+		this._enchantmentPanels();
 		log("// Enable end");
 	}
 
 	_updateMonitors() {
 		this.disable(true);
-		log("monitor update");
-		log(this);
 		this.enable(true);
 	}
 
-	_createPanel(monitor, isStandalone) {
-		let MsMain;
-		let panelBox;
+	_createPanel(monitor) {
+		if (monitor.index != 0) {
+			let panelBox;
 
-		MsMain = new St.Widget({ name: "MsMain" });
-		Main.MsMain = MsMain;
-		Main.layoutManager.addChrome(MsMain, { affectsInputRegion: false });
+			Main.layoutManager.addChrome(Main.MsMain, { affectsInputRegion: false });
 
-		let Monitor = new Clutter.Actor({ name: "Monitor" });
+			let Monitor = new Clutter.Actor({ name: "Monitor" });
 
-		if (isStandalone) {
 			panelBox = new St.BoxLayout({ name: "panelBox" });
-		} else {
-			// panelBox = Main.layoutManager.panelBox;
-			// Main.layoutManager._untrackActor(panelBox);
-			// panelBox.remove_child(Main.panel.actor);
-			// Main.layoutManager.removeChrome(panelBox);
+
+			const PANEL_ITEM_IMPLEMENTATIONS = {
+				activities: Panel.ActivitiesButton,
+				dateMenu: imports.ui.dateMenu.DateMenuButton,
+			};
+
+			Panel.Panel.prototype._ensureIndicator = function (role) {
+				let indicator = this.statusArea[role];
+				if (!indicator) {
+					let constructor = PANEL_ITEM_IMPLEMENTATIONS[role];
+					if (!constructor) {
+						// This icon is not implemented (this is a bug)
+						return null;
+					}
+					indicator = new constructor(this);
+					this.statusArea[role] = indicator;
+				}
+				return indicator;
+			};
+
+			Main.MsMain.add_child(Monitor);
+			// Main.layoutManager.addChrome(clipContainer, { affectsInputRegion: false });
+			Monitor.add_child(panelBox);
+			Main.layoutManager.trackChrome(panelBox, {
+				trackFullscreen: true,
+				affectsStruts: true,
+				affectsInputRegion: true,
+			});
+			Main.MsMain.Monitor = Monitor;
+			Main.MsMain.Monitor.panelBox = panelBox;
+
+			let panel = new Panel.Panel();
+			Main.layoutManager.panelBox.remove_actor(panel);
+			Main.MsMain.Monitor.panelBox.add_actor(panel);
+			panel.set_width(monitor.width);
+			panel._monitor = monitor;
+			return panel;
 		}
 
-		const PANEL_ITEM_IMPLEMENTATIONS = {
-			activities: Panel.ActivitiesButton,
-			appMenu: Panel.AppMenuButton, // TODO: Can be remove
-			dateMenu: imports.ui.dateMenu.DateMenuButton,
-		};
+		if (monitor.index == 0) {
+			Main.panel._monitor = monitor;
+			return Main.panel;
+		}
+	}
 
-		Panel.Panel.prototype._ensureIndicator = function (role) {
-			let indicator = this.statusArea[role];
-			if (!indicator) {
-				let constructor = PANEL_ITEM_IMPLEMENTATIONS[role];
-				if (!constructor) {
-					// This icon is not implemented (this is a bug)
-					return null;
-				}
-				indicator = new constructor(this);
-				this.statusArea[role] = indicator;
-			}
-			return indicator;
-		};
-
-		MsMain.add_child(Monitor);
-		// Main.layoutManager.addChrome(clipContainer, { affectsInputRegion: false });
-		Monitor.add_child(panelBox);
-		Main.layoutManager.trackChrome(panelBox, {
-			trackFullscreen: true,
-			affectsStruts: true,
-			affectsInputRegion: true,
+	_enchantmentPanels() {
+		this.allPanels.forEach((panel) => {
+			enchantments.enable(panel);
+			Main.layoutManager.monitors[panel._monitor.index]._panel = panel;
 		});
-		Main.MsMain.Monitor = Monitor;
-		Main.MsMain.Monitor.panelBox = panelBox;
-
-		// Create panel
-		// const PANEL_ITEM_IMPLEMENTATIONS_2 = {};
-		// Panel.Panel.prototype._ensureIndicator = function (role) {
-		// 	let indicator = this.statusArea[role];
-		// 	if (!indicator) {
-		// 		let constructor = PANEL_ITEM_IMPLEMENTATIONS_2[role];
-		// 		if (!constructor) {
-		// 			// This icon is not implemented (this is a bug)
-		// 			return null;
-		// 		}
-		// 		indicator = new constructor(this);
-		// 		this.statusArea[role] = indicator;
-		// 	}
-		// 	return indicator;
-		// };
-
-		let panel = new Panel.Panel();
-		Main.layoutManager.panelBox.remove_actor(panel);
-		Main.MsMain.Monitor.panelBox.add_actor(panel);
-		panel.set_width(2560); // TODO: Hard code screen width
-
-		enchantments.enable(panel, monitor.index);
-		return panel;
 	}
 
 	disable() {
 		log("// Disable starts");
 
-		enchantments.disable(Main.panel);
-
 		// log(JSON.stringify(this.allPanels));
 		this.allPanels.forEach((panel) => {
-			if (panel) {
+			enchantments.disable(panel);
+
+			if (panel._monitor.index != 0) {
 				// log(panel);
 				// panel.get_parent().destroy_all_children();
-				enchantments.disable(panel);
+
 				panel.destroy();
 				panel = null;
 			}
