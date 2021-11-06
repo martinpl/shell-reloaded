@@ -6,10 +6,10 @@ const { extendLeftBox } = Me.imports.panel.extendLeftBox;
 const { moveClock } = Me.imports.panel.moveClock;
 
 var enchantments = {
-	enable(panel, monitor) {
+	enable(panel) {
 		activitiesIcon.enable(panel);
 		hideAppMenu.enable(panel);
-		taskBar.enable(panel, monitor);
+		taskBar.enable(panel);
 		extendLeftBox.enable(panel);
 		moveClock.enable(panel);
 	},
