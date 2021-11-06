@@ -3,7 +3,6 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 var activitiesIcon = {
 	enable(panel) {
-		// if (panel.statusArea["activities"]) {
 		panel.statusArea["activities"].remove_actor(
 			panel.statusArea["activities"]._label
 		);
@@ -20,15 +19,12 @@ var activitiesIcon = {
 		panel.statusArea["activities"].add_child(
 			panel.statusArea["activities"].activities_icon
 		);
-		// }
 	},
 
 	disable(panel) {
-		// if (panel.statusArea["activities"]) {
 		panel.statusArea["activities"].add_actor(
 			panel.statusArea["activities"]._label
 		);
 		panel.statusArea["activities"].activities_icon.destroy();
-		// }
 	},
 };
