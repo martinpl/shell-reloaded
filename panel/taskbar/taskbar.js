@@ -35,8 +35,8 @@ var taskbar = GObject.registerClass(
 			);
 		}
 
-		// remove signals, restore Activities button, destroy workspaces bar
-		_destroy() {
+		// remove signals, destroy workspaces bar
+		_onDestroy() {
 			// if (this._ws_number_changed) {
 			// 	WM.disconnect(this._ws_number_changed);
 			// }
