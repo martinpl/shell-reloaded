@@ -4,14 +4,15 @@ const Main = imports.ui.main;
 
 var extendLeftBox = {
 	enable(panel) {
-		panel.__proto__[Gi.hook_up_vfunc_symbol]("allocate", this._vfunc_allocate);
+		const __proto__ = Object.getPrototypeOf(panel)[Gi.gobject_prototype_symbol];
+		panel.oldVfunc_allocate = Object.getPrototypeOf(panel).vfunc_allocate;
+		__proto__[Gi.hook_up_vfunc_symbol]("allocate", this._vfunc_allocate);
 	},
 
 	disable(panel) {
-		panel.__proto__[Gi.hook_up_vfunc_symbol](
-			"allocate",
-			Main.panel.__proto__.vfunc_allocate
-		);
+		const __proto__ = Object.getPrototypeOf(panel)[Gi.gobject_prototype_symbol];
+		__proto__[Gi.hook_up_vfunc_symbol]("allocate", panel.oldVfunc_allocate);
+		panel.oldVfunc_allocate = null;
 	},
 
 	_vfunc_allocate(box) {
