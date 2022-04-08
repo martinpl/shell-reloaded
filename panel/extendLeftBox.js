@@ -62,23 +62,5 @@ var extendLeftBox = {
 			childBox.x2 = allocWidth;
 		}
 		this._rightBox.allocate(childBox);
-
-		let cornerWidth, cornerHeight;
-
-		[, cornerWidth] = this._leftCorner.get_preferred_width(-1);
-		[, cornerHeight] = this._leftCorner.get_preferred_height(-1);
-		childBox.x1 = 0;
-		childBox.x2 = cornerWidth;
-		childBox.y1 = allocHeight;
-		childBox.y2 = allocHeight + cornerHeight;
-		this._leftCorner.allocate(childBox);
-
-		[, cornerWidth] = this._rightCorner.get_preferred_width(-1);
-		[, cornerHeight] = this._rightCorner.get_preferred_height(-1);
-		childBox.x1 = allocWidth - cornerWidth;
-		childBox.x2 = allocWidth;
-		childBox.y1 = allocHeight;
-		childBox.y2 = allocHeight + cornerHeight;
-		this._rightCorner.allocate(childBox);
 	},
 };
