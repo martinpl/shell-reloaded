@@ -1,4 +1,4 @@
-const { Clutter, St, Meta } = imports.gi;
+const { Clutter, St } = imports.gi;
 const Main = imports.ui.main;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Panel = imports.ui.panel;
@@ -17,7 +17,7 @@ class Extension {
 			this.allPanels.push(this._createPanel(m));
 		});
 
-		this._updateSingal = Meta.MonitorManager.get().connect(
+		this._updateSingal = global.backend.get_monitor_manager().connect(
 			"monitors-changed",
 			this._updateMonitors.bind(this)
 		);
@@ -109,7 +109,7 @@ class Extension {
 		});
 		// Main.MsMain.destroy(); for some resone prevent turn on plugin after boot
 
-		Meta.MonitorManager.get().disconnect(this._updateSingal);
+		global.backend.get_monitor_manager().disconnect(this._updateSingal);
 
 		log("// Disable ends");
 	}
