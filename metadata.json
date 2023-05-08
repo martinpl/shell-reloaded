@@ -1,9 +1,9 @@
 {
-	"shell-version": ["44"],
-	"uuid": "shell-reloaded@selfmade.pl",
-	"url": "https://github.com/MartinPL/Disable-Menu-Switching",
-	"version": "1",
-	"name": "Shell: Reloaded",
-	"description": "TODO",
-	"bindings": "org.gnome.shell.extensions.shell-reloaded.bindings"
+    "shell-version": ["44"],
+    "uuid": "shell-reloaded@selfmade.pl",
+    "url": "https://github.com/MartinPL/Shell-Reloaded",
+    "version": "1",
+    "name": "Shell: Reloaded",
+    "description": "TODO",
+    "bindings": "org.gnome.shell.extensions.shell-reloaded.bindings"
 }
