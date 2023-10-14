@@ -1,25 +1,24 @@
-const { Clutter, St } = imports.gi
-const Main = imports.ui.main
-const Me = imports.misc.extensionUtils.getCurrentExtension()
-const Panel = imports.ui.panel
-const { Keybindings } = Me.imports.keybindings
-const { enchantments } = Me.imports.panel.enchantments
+import Clutter from "gi://Clutter"
+import St from "gi://St"
+import * as Main from "resource:///org/gnome/shell/ui/main.js"
+import * as Panel from "resource:///org/gnome/shell/ui/panel.js"
+import { Keybindings } from "./keybindings.js"
+import { enchantments } from "./panel/enchantments.js"
+import { Extension } from "resource:///org/gnome/shell/extensions/extension.js"
 
-class Extension {
+export default class ShellReloaded extends Extension {
     enable() {
         log("// Enable starts")
-        new Keybindings()
+        new Keybindings(this)
 
-        Main.MsMain = new St.Widget({ name: "MsMain" })
+        global.MsMain = new St.Widget({ name: "MsMain" })
 
         this.allPanels = []
         Main.layoutManager.monitors.forEach((m) => {
             this.allPanels.push(this._createPanel(m))
         })
 
-        this._updateSingal = global.backend
-            .get_monitor_manager()
-            .connect("monitors-changed", this._updateMonitors.bind(this))
+        this._updateSingal = global.backend.get_monitor_manager().connect("monitors-changed", this._updateMonitors.bind(this))
 
         this._enchantmentPanels()
         log("// Enable end")
@@ -34,7 +33,7 @@ class Extension {
         if (monitor.index != 0) {
             let panelBox
 
-            Main.layoutManager.addChrome(Main.MsMain, { affectsInputRegion: false })
+            Main.layoutManager.addChrome(global.MsMain, { affectsInputRegion: false })
 
             let Monitor = new Clutter.Actor({ name: "Monitor" })
 
@@ -59,7 +58,7 @@ class Extension {
                 return indicator
             }
 
-            Main.MsMain.add_child(Monitor)
+            global.MsMain.add_child(Monitor)
             // Main.layoutManager.addChrome(clipContainer, { affectsInputRegion: false });
             Monitor.add_child(panelBox)
             Main.layoutManager.trackChrome(panelBox, {
@@ -67,12 +66,12 @@ class Extension {
                 affectsStruts: true,
                 affectsInputRegion: true,
             })
-            Main.MsMain.Monitor = Monitor
-            Main.MsMain.Monitor.panelBox = panelBox
+            global.MsMain.Monitor = Monitor
+            global.MsMain.Monitor.panelBox = panelBox
 
             let panel = new Panel.Panel()
             Main.layoutManager.panelBox.remove_actor(panel)
-            Main.MsMain.Monitor.panelBox.add_actor(panel)
+            global.MsMain.Monitor.panelBox.add_actor(panel)
             panel.set_width(monitor.width)
             panel._monitor = monitor
             return panel
@@ -106,14 +105,10 @@ class Extension {
                 panel = null
             }
         })
-        // Main.MsMain.destroy(); for some resone prevent turn on plugin after boot
+        // global.MsMain.destroy(); for some reason prevent turn on plugin after boot
 
         global.backend.get_monitor_manager().disconnect(this._updateSingal)
 
         log("// Disable ends")
     }
-}
-
-function init() {
-    return new Extension()
 }

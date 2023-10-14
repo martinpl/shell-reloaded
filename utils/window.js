@@ -1,4 +1,4 @@
-var window = {
+export const window = {
     killFocused() {
         let currentWindow = global.display.focus_window
         currentWindow.delete(global.get_current_time())

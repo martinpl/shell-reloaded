@@ -1,4 +1,4 @@
-var moveClock = {
+export const moveClock = {
     enable(panel) {
         // if (panel.statusArea["dateMenu"]) {
         let centerBox = panel._centerBox

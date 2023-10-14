@@ -1,20 +1,18 @@
-const { GObject, Meta, Shell } = imports.gi
-const Main = imports.ui.main
-const Me = imports.misc.extensionUtils.getCurrentExtension()
-const { getSettings } = Me.imports.utils.settings
-const { addKeybinding } = Me.imports.utils.addKeybinding
-const { navigation } = Me.imports.utils.navigation
-const { worspace } = Me.imports.utils.worspace
-const { zen } = Me.imports.utils.zen
-const { tab } = Me.imports.utils.tab
-const { window } = Me.imports.utils.window
-var Windows = Me.imports.utils.windows
-var Keybindings
+import GObject from "gi://GObject"
+// import * as Main from "resource:///org/gnome/shell/ui/main.js"
+import { getSettings } from "./utils/settings.js"
+import { addKeybinding } from "./utils/addKeybinding.js"
+import { navigation } from "./utils/navigation.js"
+import { worspace } from "./utils/worspace.js"
+import { zen } from "./utils/zen.js"
+import { tab } from "./utils/tab.js"
+import { window } from "./utils/window.js"
+import * as Windows from "./utils/windows.js"
 
-const Gio$1 = imports.gi.Gio
+import Gio from "gi://Gio"
 class RequiredSettingsModule {
-    constructor() {
-        const bindingSettings = getSettings("bindings")
+    constructor(extension) {
+        const bindingSettings = getSettings("bindings", extension)
         this.hotkeysToRemove = bindingSettings.list_keys().map((key) => {
             return bindingSettings.get_strv(key)[0]
         })
@@ -25,7 +23,7 @@ class RequiredSettingsModule {
             "org.gnome.mutter.keybindings",
             "org.gnome.mutter.wayland.keybindings",
         ]) {
-            const setting = new Gio$1.Settings({
+            const setting = new Gio.Settings({
                 schema_id: schema,
             })
             setting.list_keys().forEach((key) => {
@@ -49,28 +47,29 @@ class RequiredSettingsModule {
     }
 }
 
-var Keybindings = GObject.registerClass(
+export const Keybindings = GObject.registerClass(
     class Keybindings extends GObject.Object {
-        _init() {
+        constructor(extension) {
+            super()
             // Main.wm.removeKeybinding("toggle-overview");
             // Main.wm.removeKeybinding("restore-shortcuts");
-            new RequiredSettingsModule()
+            new RequiredSettingsModule(extension)
 
-            addKeybinding("toggle-shell-ui", zen.toggle.bind())
-            addKeybinding("previous-workspace", navigation.previousWorkspace.bind())
-            addKeybinding("next-workspace", navigation.nextWorkspace.bind())
-            addKeybinding("previous-window", navigation.previousWindow.bind())
-            addKeybinding("next-window", navigation.nextWindow.bind())
-            addKeybinding("kill-focused-window", window.killFocused.bind())
-            addKeybinding("move-window-top", window.moveTop.bind())
-            addKeybinding("move-window-bottom", window.moveBottom.bind())
-            addKeybinding("move-window-monitor-left", Windows.moveWindow.bind(null, "LEFT"))
-            addKeybinding("move-window-monitor-right", Windows.moveWindow.bind(null, "RIGHT"))
-            addKeybinding("move-window-tab-left", tab.moveLeft.bind())
-            addKeybinding("move-window-tab-right", tab.moveRight.bind())
-            addKeybinding("navigate-to-workspace-1", worspace.goTo.bind(null, 0))
-            addKeybinding("navigate-to-workspace-2", worspace.goTo.bind(null, 1))
-            addKeybinding("navigate-to-workspace-3", worspace.goTo.bind(null, 2))
+            addKeybinding("toggle-shell-ui", zen.toggle.bind(), extension)
+            addKeybinding("previous-workspace", navigation.previousWorkspace.bind(), extension)
+            addKeybinding("next-workspace", navigation.nextWorkspace.bind(), extension)
+            addKeybinding("previous-window", navigation.previousWindow.bind(), extension)
+            addKeybinding("next-window", navigation.nextWindow.bind(), extension)
+            addKeybinding("kill-focused-window", window.killFocused.bind(), extension)
+            addKeybinding("move-window-top", window.moveTop.bind(), extension)
+            addKeybinding("move-window-bottom", window.moveBottom.bind(), extension)
+            addKeybinding("move-window-monitor-left", Windows.moveWindow.bind(null, "LEFT"), extension)
+            addKeybinding("move-window-monitor-right", Windows.moveWindow.bind(null, "RIGHT"), extension)
+            addKeybinding("move-window-tab-left", tab.moveLeft.bind(), extension)
+            addKeybinding("move-window-tab-right", tab.moveRight.bind(), extension)
+            addKeybinding("navigate-to-workspace-1", worspace.goTo.bind(null, 0), extension)
+            addKeybinding("navigate-to-workspace-2", worspace.goTo.bind(null, 1), extension)
+            addKeybinding("navigate-to-workspace-3", worspace.goTo.bind(null, 2), extension)
         }
     }
 

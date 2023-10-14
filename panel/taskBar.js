@@ -1,7 +1,6 @@
-const Me = imports.misc.extensionUtils.getCurrentExtension()
-const { taskbar } = Me.imports.panel.taskbar.taskbar
+import { taskbar } from "./taskbar/taskbar.js"
 
-var taskBar = {
+export const taskBar = {
     enable(panel) {
         panel._taskbar = new taskbar(panel._monitor?.index)
         panel.addToStatusArea("taskbar", panel._taskbar, 5, "left")

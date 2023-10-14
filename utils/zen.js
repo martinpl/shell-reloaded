@@ -1,6 +1,6 @@
-const Main = imports.ui.main
+import * as Main from "resource:///org/gnome/shell/ui/main.js"
 
-var zen = {
+export const zen = {
     toggle() {
         const currentMonitor = global.display.get_current_monitor()
         const panel = Main.layoutManager.monitors[currentMonitor]._panel

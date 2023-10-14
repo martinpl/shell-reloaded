@@ -1,8 +1,7 @@
-const Main = imports.ui.main
-const Me = imports.misc.extensionUtils.getCurrentExtension()
-var Windows = Me.imports.utils.windows
+import * as Main from "resource:///org/gnome/shell/ui/main.js"
+import * as Windows from "./windows.js"
 
-var tab = {
+export const tab = {
     moveLeft() {
         let _items = Windows.getWindowList()
 

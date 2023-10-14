@@ -1,8 +1,7 @@
-const { Clutter } = imports.gi
-const Gi = imports._gi
-const Main = imports.ui.main
+import Clutter from "gi://Clutter"
+const Gi = imports._gi // TODO: ?
 
-var extendLeftBox = {
+export const extendLeftBox = {
     enable(panel) {
         const __proto__ = Object.getPrototypeOf(panel)[Gi.gobject_prototype_symbol]
         panel.oldVfunc_allocate = Object.getPrototypeOf(panel).vfunc_allocate

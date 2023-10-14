@@ -1,14 +1,11 @@
-const { Meta } = imports.gi
+import Meta from "gi://Meta"
 
-var getWindowList = function () {
-    this.workspace = null
-
-    this.workspaceManager = global.workspace_manager
-    this.workspace = workspaceManager.get_active_workspace()
-    this.monitor = global.display.get_current_monitor()
-    this.windows = workspace.list_windows().filter((w) => w.get_monitor() === this.monitor)
+export const getWindowList = function () {
+    let workspace = global.workspace_manager.get_active_workspace()
+    const monitor = global.display.get_current_monitor()
+    let windows = workspace.list_windows().filter((w) => w.get_monitor() === monitor)
     // log(windows);
-    this.windows.sort((a, b) => {
+    windows.sort((a, b) => {
         return a._sort - b._sort
     })
 
@@ -16,16 +13,13 @@ var getWindowList = function () {
     // 	log(`${monitor} | ${window.title} | ${window.get_id()}`);
     // });
 
-    return this.windows
+    return windows
 }
 
-var moveWindow = function (dir) {
+export const moveWindow = function (dir) {
     let currentWindow = global.display.focus_window
     const currentMonitor = currentWindow.get_monitor()
-    const monitorIndex = global.display.get_monitor_neighbor_index(
-        currentMonitor,
-        Meta.DisplayDirection[dir]
-    )
+    const monitorIndex = global.display.get_monitor_neighbor_index(currentMonitor, Meta.DisplayDirection[dir])
     log("Monitro index" + monitorIndex)
 
     if (monitorIndex >= 0) {

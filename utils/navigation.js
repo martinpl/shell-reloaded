@@ -1,7 +1,6 @@
-const Me = imports.misc.extensionUtils.getCurrentExtension()
-var Windows = Me.imports.utils.windows
+import * as Windows from "./windows.js"
 
-var navigation = {
+export const navigation = {
     previousWorkspace() {
         const ws_count = global.workspace_manager.get_n_workspaces()
         let ws_index = global.workspace_manager.get_active_workspace_index()
@@ -18,9 +17,7 @@ var navigation = {
             })
 
             if (window_list.length) {
-                global.workspace_manager
-                    .get_workspace_by_index(ws_index)
-                    .activate_with_focus(window_list[0], global.get_current_time())
+                global.workspace_manager.get_workspace_by_index(ws_index).activate_with_focus(window_list[0], global.get_current_time())
             } else {
                 log("otworz app draw")
                 nextworspace.activate(true)
@@ -44,9 +41,7 @@ var navigation = {
             })
 
             if (window_list.length) {
-                global.workspace_manager
-                    .get_workspace_by_index(ws_index)
-                    .activate_with_focus(window_list[0], global.get_current_time())
+                global.workspace_manager.get_workspace_by_index(ws_index).activate_with_focus(window_list[0], global.get_current_time())
             } else {
                 nextworspace.activate(true)
                 // Main.overview.toggle();

@@ -1,15 +1,10 @@
-/** Gnome libs imports */
-const { Gio } = imports.gi
+import Gio from "gi://Gio"
 
-/** Extension imports */
-const Me = imports.misc.extensionUtils.getCurrentExtension()
-
-/* exported getSettings */
-var getSettings = (key) =>
+export const getSettings = (key, extension) =>
     new Gio.Settings({
         settings_schema: Gio.SettingsSchemaSource.new_from_directory(
-            Me.dir.get_child("schemas").get_path(),
+            extension.dir.get_child("schemas").get_path(),
             Gio.SettingsSchemaSource.get_default(),
             false
-        ).lookup(Me.metadata[key], true),
+        ).lookup(extension.metadata[key], true),
     })
