@@ -5,6 +5,7 @@ import * as Panel from "resource:///org/gnome/shell/ui/panel.js"
 import { Keybindings } from "./keybindings.js"
 import { enchantments } from "./panel/enchantments.js"
 import { Extension } from "resource:///org/gnome/shell/extensions/extension.js"
+import { DateMenuButton } from "resource:///org/gnome/shell/ui/dateMenu.js"
 
 export default class ShellReloaded extends Extension {
     enable() {
@@ -41,7 +42,7 @@ export default class ShellReloaded extends Extension {
 
             const PANEL_ITEM_IMPLEMENTATIONS = {
                 activities: Panel.ActivitiesButton,
-                dateMenu: imports.ui.dateMenu.DateMenuButton,
+                dateMenu: DateMenuButton,
             }
 
             Panel.Panel.prototype._ensureIndicator = function (role) {
