@@ -71,8 +71,8 @@ export default class ShellReloaded extends Extension {
             global.MsMain.Monitor.panelBox = panelBox
 
             let panel = new Panel.Panel()
-            Main.layoutManager.panelBox.remove_actor(panel)
-            global.MsMain.Monitor.panelBox.add_actor(panel)
+            Main.layoutManager.panelBox.remove_child(panel)
+            global.MsMain.Monitor.panelBox.add_child(panel)
             panel.set_width(monitor.width)
             panel._monitor = monitor
             return panel
