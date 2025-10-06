@@ -31,7 +31,7 @@ export default class ShellReloaded extends Extension {
     }
 
     _createPanel(monitor) {
-        if (monitor.index != 0) {
+        if (monitor.index != Main.layoutManager.primaryIndex) {
             let panelBox
 
             Main.layoutManager.addChrome(global.MsMain, { affectsInputRegion: false })
@@ -78,7 +78,7 @@ export default class ShellReloaded extends Extension {
             return panel
         }
 
-        if (monitor.index == 0) {
+        if (monitor.index == Main.layoutManager.primaryIndex) {
             Main.panel._monitor = monitor
             return Main.panel
         }
@@ -98,7 +98,7 @@ export default class ShellReloaded extends Extension {
         this.allPanels.forEach((panel) => {
             enchantments.disable(panel)
 
-            if (panel._monitor.index != 0) {
+            if (panel._monitor.index != Main.layoutManager.primaryIndex) {
                 // log(panel);
                 // panel.get_parent().destroy_all_children();
 
