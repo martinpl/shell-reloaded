@@ -12,7 +12,9 @@ export default class ShellReloaded extends Extension {
         log("// Enable starts")
         new Keybindings(this)
 
-        global.MsMain = new St.Widget({ name: "MsMain" })
+        if (!global.MsMain) {
+            global.MsMain = new St.Widget({ name: "MsMain" })
+        }
 
         this.allPanels = []
         Main.layoutManager.monitors.forEach((m) => {
@@ -32,13 +34,14 @@ export default class ShellReloaded extends Extension {
 
     _createPanel(monitor) {
         if (monitor.index != Main.layoutManager.primaryIndex) {
-            let panelBox
-
-            Main.layoutManager.addChrome(global.MsMain, { affectsInputRegion: false })
+            if (!global.MsMain.get_parent()) {
+                Main.layoutManager.addChrome(global.MsMain, { affectsInputRegion: false })
+            }
 
             let Monitor = new Clutter.Actor({ name: "Monitor" })
+            Monitor.set_position(monitor.x, monitor.y)
 
-            panelBox = new St.BoxLayout({ name: "panelBox" })
+            let panelBox = new St.BoxLayout({ name: "panelBox" })
 
             const PANEL_ITEM_IMPLEMENTATIONS = {
                 activities: Panel.ActivitiesButton,
@@ -67,12 +70,10 @@ export default class ShellReloaded extends Extension {
                 affectsStruts: true,
                 affectsInputRegion: true,
             })
-            global.MsMain.Monitor = Monitor
-            global.MsMain.Monitor.panelBox = panelBox
 
             let panel = new Panel.Panel()
             Main.layoutManager.panelBox.remove_child(panel)
-            global.MsMain.Monitor.panelBox.add_child(panel)
+            panelBox.add_child(panel)
             panel.set_width(monitor.width)
             panel._monitor = monitor
             return panel
@@ -99,14 +100,11 @@ export default class ShellReloaded extends Extension {
             enchantments.disable(panel)
 
             if (panel._monitor.index != Main.layoutManager.primaryIndex) {
-                // log(panel);
-                // panel.get_parent().destroy_all_children();
-
                 panel.destroy()
-                panel = null
             }
         })
-        // global.MsMain.destroy(); for some reason prevent turn on plugin after boot
+        this.allPanels = []
+        global.MsMain.destroy_all_children()
 
         global.backend.get_monitor_manager().disconnect(this._updateSingal)
 
