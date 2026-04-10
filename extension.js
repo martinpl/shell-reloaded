@@ -99,7 +99,7 @@ export default class ShellReloaded extends Extension {
         this.allPanels.forEach((panel) => {
             enchantments.disable(panel)
 
-            if (panel._monitor.index != Main.layoutManager.primaryIndex) {
+            if (panel !== Main.panel) {
                 panel.destroy()
             }
         })
